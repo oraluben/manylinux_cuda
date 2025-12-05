@@ -12,7 +12,10 @@ jobs:
     strategy:
       matrix:
         target:
-          - { CUDA: "12.8", platform: platforms }
+          - { CUDA: "12.8", BASE: "manylinux_2_28" }
+          - { CUDA: "12.9", BASE: "manylinux_2_28" }
+          - { CUDA: "13.0", BASE: "manylinux_2_28" }
+          - { CUDA: "13.1", BASE: "manylinux_2_28" }
     runs-on: ubuntu-latest
     steps:
       - name: Set up Docker
@@ -33,5 +36,6 @@ jobs:
           platforms: linux/amd64,linux/arm64
           build-args: |
             CUDA=${{ matrix.target.CUDA }}
+            BASE=${{ matrix.target.BASE }}
           load: true
-          tags: oraluben/manylinux_cuda:${{ matrix.target.CUDA }}
+          tags: oraluben/manylinux_2_28:${{ matrix.target.CUDA }}
