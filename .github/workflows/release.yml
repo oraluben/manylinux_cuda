@@ -37,5 +37,5 @@ jobs:
           build-args: |
             CUDA=${{ matrix.target.CUDA }}
             BASE=${{ matrix.target.BASE }}
-          load: true
+          push: true
           tags: oraluben/manylinux_2_28:${{ matrix.target.CUDA }}
