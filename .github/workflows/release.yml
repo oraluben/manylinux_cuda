@@ -16,6 +16,8 @@ jobs:
           - { CUDA: "12.9", BASE: "manylinux_2_28" }
           - { CUDA: "13.0", BASE: "manylinux_2_28" }
           - { CUDA: "13.1", BASE: "manylinux_2_28" }
+    env:
+      latest: "13.1"
     runs-on: ubuntu-latest
     steps:
       - name: Set up Docker
@@ -30,6 +32,13 @@ jobs:
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v3
 
+      - name: Set up target for latest
+        if: ${{ env.latest == matrix.target.CUDA }}
+        run: echo "TARGET_IMAGE=oraluben/manylinux_2_28:${{ matrix.target.CUDA }},oraluben/manylinux_2_28:latest" >> $GITHUB_ENV
+      - name: Set up target
+        if: ${{ env.latest != matrix.target.CUDA }}
+        run: echo "TARGET_IMAGE=oraluben/manylinux_2_28:${{ matrix.target.CUDA }}" >> $GITHUB_ENV
+
       - name: Build and push
         uses: docker/build-push-action@v6
         with:
@@ -38,4 +47,4 @@ jobs:
             CUDA=${{ matrix.target.CUDA }}
             BASE=${{ matrix.target.BASE }}
           push: true
-          tags: oraluben/manylinux_2_28:${{ matrix.target.CUDA }}
+          tags: ${{ env.TARGET_IMAGE }}
