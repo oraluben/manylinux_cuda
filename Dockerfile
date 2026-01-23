@@ -15,6 +15,7 @@ RUN set -eux; \
     cudaver=${CUDA}; \
     v="${cudaver//./-}"; \
     yum install -y cuda-minimal-build-${v} cuda-driver-devel-${v} cuda-nvrtc-devel-${v} nvidia-driver-cuda-libs; \
+    yum install -y libcusparse-devel-${v} libcublas-devel-${v} libcufft-devel-${v} libcusolver-devel-${v}; \
     yum clean all
 
 ENV PATH=/usr/local/cuda-${CUDA}/bin:$PATH
