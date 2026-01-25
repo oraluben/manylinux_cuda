@@ -15,10 +15,7 @@ RUN set -eux; \
     cudaver=${CUDA}; \
     v="${cudaver//./-}"; \
     yum install -y cuda-minimal-build-${v} cuda-driver-devel-${v} cuda-nvrtc-devel-${v} nvidia-driver-cuda-libs; \
-    if [[ "${CUDA}" != 12.* ]]; then \
-        # CUDA 12.x have more space usage
-        yum install -y libcusparse-devel-${v} libcublas-devel-${v} libcufft-devel-${v} libcusolver-devel-${v}; \
-    fi; \
+    yum install -y libcusparse-devel-${v} libcublas-devel-${v} libcufft-devel-${v} libcusolver-devel-${v}; \
     yum clean all
 
 ENV PATH=/usr/local/cuda-${CUDA}/bin:$PATH
