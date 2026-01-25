@@ -12,10 +12,27 @@ FROM ${BASE}_${TARGETARCH} AS base
 ARG CUDA=12.9
 
 RUN set -eux; \
-    cudaver=${CUDA}; \
-    v="${cudaver//./-}"; \
+    v=${CUDA//./-}; \
     yum install -y cuda-minimal-build-${v} cuda-driver-devel-${v} cuda-nvrtc-devel-${v} nvidia-driver-cuda-libs; \
-    yum install -y libcusparse-devel-${v} libcublas-devel-${v} libcufft-devel-${v} libcusolver-devel-${v}; \
+    yum clean all
+
+# Download these large packages in parallel when pulling image
+# Each layer is ~1.0-1.2 GB
+
+RUN set -eux; \
+    yum install -y libcublas-devel-${CUDA//./-}; \
+    yum clean all
+
+RUN set -eux; \
+    yum install -y libcusparse-devel-${CUDA//./-}; \
+    yum clean all
+
+RUN set -eux; \
+    yum install -y libcufft-devel-${CUDA//./-}; \
+    yum clean all
+
+RUN set -eux; \
+    yum install -y libcusolver-devel-${CUDA//./-}; \
     yum clean all
 
 ENV PATH=/usr/local/cuda-${CUDA}/bin:$PATH
